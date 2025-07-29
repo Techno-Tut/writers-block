@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Writer Block",
+  "version": "1.0",
+  "description": "Break through writer's block with AI-powered writing assistance",
+  
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"],
+    "css": ["styles.css"]
+  }],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
