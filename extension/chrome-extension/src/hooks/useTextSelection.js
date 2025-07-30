@@ -8,13 +8,31 @@ export const useTextSelection = () => {
   const [selectedText, setSelectedText] = useState('');
   const [selectionCount, setSelectionCount] = useState(0);
   const [hasSelection, setHasSelection] = useState(false);
+  const [selectionRange, setSelectionRange] = useState(null);
 
   const clearSelection = useCallback(() => {
     console.log('Manually clearing selection');
     setSelectedText('');
     setHasSelection(false);
+    setSelectionRange(null);
     window.getSelection().removeAllRanges();
   }, []);
+
+  const restoreSelection = useCallback(() => {
+    if (selectionRange) {
+      try {
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(selectionRange.cloneRange());
+        console.log('Selection restored for text replacement');
+        return true;
+      } catch (error) {
+        console.error('Failed to restore selection:', error);
+        return false;
+      }
+    }
+    return false;
+  }, [selectionRange]);
 
   useEffect(() => {
     let selectionTimer = null;
@@ -38,6 +56,14 @@ export const useTextSelection = () => {
         
         if (text.length > 0) {
           console.log('Text selected:', text);
+          
+          // Store the selection range for later use
+          if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            setSelectionRange(range.cloneRange());
+            console.log('Selection range stored');
+          }
+          
           setSelectedText(text);
           setSelectionCount(prev => prev + 1);
           setHasSelection(true);
@@ -47,6 +73,7 @@ export const useTextSelection = () => {
             console.log('Text deselected');
             setSelectedText('');
             setHasSelection(false);
+            setSelectionRange(null);
           }
         }
       }, SELECTION_DELAY);
@@ -70,6 +97,8 @@ export const useTextSelection = () => {
     selectedText,
     selectionCount,
     hasSelection,
-    clearSelection
+    selectionRange,
+    clearSelection,
+    restoreSelection
   };
 };

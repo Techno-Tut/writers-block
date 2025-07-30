@@ -9,6 +9,7 @@ const DebugPanel = ({
   result,
   loading,
   error,
+  successMessage,
   onClose 
 }) => {
   return (
@@ -31,6 +32,7 @@ const DebugPanel = ({
       <p><strong>API Status:</strong> {loading ? 'Loading...' : error ? 'Error' : result ? 'Success' : 'Idle'}</p>
       {error && <p><strong>Error:</strong> {error}</p>}
       {result && <p><strong>Last Result:</strong> {result.message}</p>}
+      {successMessage && <p><strong>Success:</strong> {successMessage}</p>}
       <p><strong>Current Selection:</strong></p>
       <div className="selected-text">
         {selectedText || 'No text selected'}

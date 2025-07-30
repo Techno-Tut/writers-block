@@ -1,8 +1,16 @@
 import React from 'react';
 import '../styles/result-display.css';
 
-const ResultDisplay = ({ original, processed, message, onClose }) => {
+const ResultDisplay = ({ original, processed, message, onClose, onApply, onCancel }) => {
   const hasChanges = original !== processed;
+
+  const handleApply = () => {
+    onApply(processed);
+  };
+
+  const handleCancel = () => {
+    onCancel();
+  };
 
   return (
     <div className="result-display">
@@ -37,9 +45,20 @@ const ResultDisplay = ({ original, processed, message, onClose }) => {
             </div>
             
             <div className="result-actions">
-              <p className="action-hint">
-                🚧 Text replacement coming in Iteration 4!
-              </p>
+              <button 
+                onClick={handleApply}
+                className="btn btn-apply"
+                title="Replace selected text with processed version"
+              >
+                ✅ Apply Changes
+              </button>
+              <button 
+                onClick={handleCancel}
+                className="btn btn-cancel"
+                title="Keep original text unchanged"
+              >
+                ❌ Keep Original
+              </button>
             </div>
           </>
         ) : (
@@ -47,6 +66,14 @@ const ResultDisplay = ({ original, processed, message, onClose }) => {
             <div className="text-content">{processed}</div>
             <div className="result-message info">
               No changes needed - your text looks good! ✅
+            </div>
+            <div className="result-actions">
+              <button 
+                onClick={handleCancel}
+                className="btn btn-cancel"
+              >
+                Close
+              </button>
             </div>
           </div>
         )}

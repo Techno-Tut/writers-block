@@ -100,7 +100,7 @@
   padding: 6px 8px;
   border-radius: 4px;
   font-size: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .result-message.success {
@@ -123,8 +123,58 @@
 
 /* Result Actions */
 .result-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.result-actions .btn {
+  flex: 1;
+  max-width: 120px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-apply {
+  background: #48bb78;
+  color: white;
+}
+
+.btn-apply:hover {
+  background: #38a169;
+  transform: translateY(-1px);
+}
+
+.btn-cancel {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.btn-cancel:hover {
+  background: #cbd5e0;
+}
+
+/* Success Actions */
+.success-actions {
   text-align: center;
   margin-top: 8px;
+}
+
+.success-hint {
+  font-size: 11px;
+  color: #718096;
+  margin: 0;
+  font-style: italic;
 }
 
 .action-hint {
@@ -132,6 +182,7 @@
   color: #718096;
   margin: 0;
   font-style: italic;
+  text-align: center;
 }
 
 /* Error Help */
