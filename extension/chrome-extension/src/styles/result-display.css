@@ -1,0 +1,163 @@
+/* Result Display Styles */
+
+.result-display {
+  border-top: 1px solid #e2e8f0;
+  margin-top: 12px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0 8px 0;
+}
+
+.result-title {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 14px;
+}
+
+.result-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #718096;
+  cursor: pointer;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.result-close:hover {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.result-content {
+  padding-bottom: 4px;
+}
+
+/* Text Comparison */
+.text-comparison {
+  margin-bottom: 12px;
+}
+
+.original-text,
+.processed-text {
+  margin-bottom: 8px;
+}
+
+.original-text strong,
+.processed-text strong {
+  display: block;
+  font-size: 12px;
+  color: #4a5568;
+  margin-bottom: 4px;
+}
+
+.text-content {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #2d3748;
+}
+
+.processed-text .text-content {
+  background: #f0fff4;
+  border-color: #9ae6b4;
+}
+
+/* No Changes */
+.no-changes .text-content {
+  background: #f0fff4;
+  border-color: #9ae6b4;
+  margin-bottom: 8px;
+}
+
+/* Result Messages */
+.result-message {
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.result-message.success {
+  background: #f0fff4;
+  color: #22543d;
+  border: 1px solid #9ae6b4;
+}
+
+.result-message.info {
+  background: #ebf8ff;
+  color: #2a4365;
+  border: 1px solid #90cdf4;
+}
+
+.result-message.error {
+  background: #fed7d7;
+  color: #742a2a;
+  border: 1px solid #fc8181;
+}
+
+/* Result Actions */
+.result-actions {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.action-hint {
+  font-size: 11px;
+  color: #718096;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Error Help */
+.error-help {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #4a5568;
+}
+
+.error-help p {
+  margin: 4px 0;
+}
+
+.error-help ul {
+  margin: 4px 0;
+  padding-left: 16px;
+}
+
+.error-help li {
+  margin: 2px 0;
+}
+
+.error-help code {
+  background: #e2e8f0;
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 10px;
+}

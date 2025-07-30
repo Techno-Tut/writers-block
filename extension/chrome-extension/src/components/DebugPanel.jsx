@@ -4,7 +4,11 @@ const DebugPanel = ({
   selectedText, 
   selectionCount, 
   isFloatingWindowVisible, 
-  windowPosition, 
+  windowPosition,
+  sessionId,
+  result,
+  loading,
+  error,
   onClose 
 }) => {
   return (
@@ -23,6 +27,10 @@ const DebugPanel = ({
       <p><strong>Selections Made:</strong> {selectionCount}</p>
       <p><strong>Floating Window:</strong> {isFloatingWindowVisible ? 'Visible' : 'Hidden'}</p>
       <p><strong>Position:</strong> x:{windowPosition.x}, y:{windowPosition.y}</p>
+      <p><strong>Session ID:</strong> {sessionId || 'None'}</p>
+      <p><strong>API Status:</strong> {loading ? 'Loading...' : error ? 'Error' : result ? 'Success' : 'Idle'}</p>
+      {error && <p><strong>Error:</strong> {error}</p>}
+      {result && <p><strong>Last Result:</strong> {result.message}</p>}
       <p><strong>Current Selection:</strong></p>
       <div className="selected-text">
         {selectedText || 'No text selected'}

@@ -10,6 +10,7 @@ export const useTextSelection = () => {
   const [hasSelection, setHasSelection] = useState(false);
 
   const clearSelection = useCallback(() => {
+    console.log('Manually clearing selection');
     setSelectedText('');
     setHasSelection(false);
     window.getSelection().removeAllRanges();
@@ -18,7 +19,13 @@ export const useTextSelection = () => {
   useEffect(() => {
     let selectionTimer = null;
     
-    const handleTextSelection = () => {
+    const handleTextSelection = (event) => {
+      // Don't process selection changes if the click was on our extension UI
+      if (event.target.closest('.writers-block-app')) {
+        console.log('Ignoring selection change from extension UI');
+        return;
+      }
+      
       // Clear existing timer
       if (selectionTimer) {
         clearTimeout(selectionTimer);
@@ -35,9 +42,12 @@ export const useTextSelection = () => {
           setSelectionCount(prev => prev + 1);
           setHasSelection(true);
         } else {
-          console.log('Text deselected');
-          setSelectedText('');
-          setHasSelection(false);
+          // Only clear if we don't already have a selection (to prevent clearing during API calls)
+          if (hasSelection) {
+            console.log('Text deselected');
+            setSelectedText('');
+            setHasSelection(false);
+          }
         }
       }, SELECTION_DELAY);
     };
@@ -54,7 +64,7 @@ export const useTextSelection = () => {
         clearTimeout(selectionTimer);
       }
     };
-  }, []);
+  }, [hasSelection]);
 
   return {
     selectedText,

@@ -18,12 +18,13 @@ export const DEBUG_PANEL = {
   Z_INDEX: 10000
 };
 
-// API Configuration (for future use)
+// API Configuration
 export const API = {
   BASE_URL: 'http://localhost:8000',
   ENDPOINTS: {
     PROCESS_TEXT: '/api/v1/process-text'
-  }
+  },
+  TIMEOUT: 30000 // 30 seconds
 };
 
 // Extension Info

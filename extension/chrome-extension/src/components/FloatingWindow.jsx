@@ -1,11 +1,20 @@
 import React from 'react';
+import ActionButtons from './ActionButtons';
+import ResultDisplay from './ResultDisplay';
+import ErrorMessage from './ErrorMessage';
 import '../styles/floating-window.css';
 
 const FloatingWindow = ({ 
   isVisible, 
   position, 
   selectedText, 
-  onClose 
+  onClose,
+  onResult,
+  result,
+  loading,
+  error,
+  onClearError,
+  onClearResult
 }) => {
   if (!isVisible || !selectedText) {
     return null;
@@ -40,10 +49,28 @@ const FloatingWindow = ({
           <strong>Selected:</strong> "{selectedText.substring(0, 50)}{selectedText.length > 50 ? '...' : ''}"
         </div>
         
-        <div className="action-placeholder">
-          <p>🚧 Action buttons coming in Iteration 3!</p>
-          <p>For now, this window appears near your text selection.</p>
-        </div>
+        <ActionButtons
+          selectedText={selectedText}
+          onResult={onResult}
+          loading={loading}
+          onError={onClearError}
+        />
+        
+        {error && (
+          <ErrorMessage 
+            error={error} 
+            onClose={onClearError}
+          />
+        )}
+        
+        {result && !error && (
+          <ResultDisplay
+            original={selectedText}
+            processed={result.processed_text}
+            message={result.message}
+            onClose={onClearResult}
+          />
+        )}
       </div>
     </div>
   );

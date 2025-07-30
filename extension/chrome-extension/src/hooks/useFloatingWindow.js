@@ -15,29 +15,47 @@ export const useFloatingWindow = (hasSelection) => {
       const newPosition = calculateFloatingWindowPosition();
       setPosition(newPosition);
       setIsVisible(true);
+      console.log('Floating window shown');
     } else {
       setIsVisible(false);
+      console.log('Floating window hidden (no selection)');
     }
   }, [hasSelection]);
 
-  // Handle clicks outside window
+  // Handle clicks outside window - use setTimeout to let button clicks complete first
   useEffect(() => {
     const handleDocumentClick = (event) => {
-      if (isVisible && isClickOutsideWindow(event, windowRef.current)) {
-        setIsVisible(false);
-      }
+      console.log('Document click detected, target:', event.target);
+      
+      // Use setTimeout to let button clicks complete first
+      setTimeout(() => {
+        if (isVisible && windowRef.current) {
+          const isOutside = isClickOutsideWindow(event, windowRef.current);
+          console.log('Click outside window?', isOutside);
+          
+          if (isOutside) {
+            console.log('Closing window due to outside click');
+            setIsVisible(false);
+          }
+        }
+      }, 0);
     };
 
     if (isVisible) {
-      document.addEventListener('click', handleDocumentClick);
+      console.log('Adding document click listener');
+      document.addEventListener('click', handleDocumentClick, true); // Use capture phase
     }
 
     return () => {
-      document.removeEventListener('click', handleDocumentClick);
+      if (isVisible) {
+        console.log('Removing document click listener');
+      }
+      document.removeEventListener('click', handleDocumentClick, true);
     };
   }, [isVisible]);
 
   const closeWindow = useCallback(() => {
+    console.log('Closing window manually');
     setIsVisible(false);
   }, []);
 
