@@ -1,48 +1,64 @@
-# Writer Block Chrome Extension
+# Writers Block Chrome Extension
 
-## Project Structure
+AI-powered writing assistant for Salesforce Quip with React components.
+
+## Development Setup
+
+### 1. Install Dependencies
+```bash
+npm install
+```
+
+### 2. Build Extension
+```bash
+# Development build with watch mode
+npm run dev
+
+# Production build
+npm run build
+```
+
+### 3. Load Extension in Chrome
+1. Open Chrome and go to `chrome://extensions/`
+2. Enable "Developer mode" (top right toggle)
+3. Click "Load unpacked"
+4. Select this directory (`chrome-extension/`)
+
+### 4. Test the Extension
+1. Navigate to any Quip document
+2. Look for the debug panel in the top-right corner
+3. Select text on the page
+4. Check console logs and debug panel for text selection detection
+
+## Current Implementation (Iteration 1)
+
+✅ **React Setup**: React components working in Chrome extension  
+✅ **Text Selection**: Detects text selection with 0.5s delay  
+✅ **Debug UI**: Visual feedback for development  
+✅ **Console Logging**: Text selection events logged  
+
+## File Structure
 
 ```
 chrome-extension/
-├── manifest.json     # Extension configuration
-├── content.js        # Runs on web pages, handles text selection
-├── background.js     # Background processes, API calls
-├── popup.html        # Extension popup interface
-├── popup.js          # Popup functionality
-├── styles.css        # Custom styles for injected UI
-├── icons/            # Extension icons (16px, 48px, 128px)
-└── README.md         # This file
+├── src/
+│   ├── content-script/
+│   │   └── index.js          # Entry point
+│   ├── components/
+│   │   └── App.jsx           # Main React component
+│   ├── styles/
+│   │   └── app.css           # Component styles
+│   └── utils/                # Utilities (future)
+├── dist/                     # Built files (generated)
+├── webpack.config.js         # Build configuration
+├── package.json              # Dependencies
+└── manifest.json             # Extension manifest
 ```
 
-## How to Load the Extension
+## Next Iterations
 
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable "Developer mode" (toggle in top right)
-3. Click "Load unpacked"
-4. Select the `chrome-extension` folder
-5. The extension should now appear in your extensions list
-
-## Development Workflow
-
-1. Make changes to the files
-2. Go to `chrome://extensions/`
-3. Click the refresh icon on your extension
-4. Test on any webpage
-
-## Current Status
-
-- ✅ Basic structure created
-- ✅ Manifest configured for Manifest V3
-- ✅ Content script detects text selection
-- ✅ Background script ready for API calls
-- ⏳ Floating UI (TODO)
-- ⏳ AI integration (TODO)
-- ⏳ Text replacement (TODO)
-
-## Next Steps
-
-1. Create floating window UI
-2. Implement text replacement logic
-3. Connect to AI backend
-4. Add styling and animations
-5. Test on various websites (Quip, Google Docs, etc.)
+- **Iteration 2**: Simple floating window
+- **Iteration 3**: Action buttons + API integration
+- **Iteration 4**: Text replacement
+- **Iteration 5**: Chat interface
+- **Iteration 6**: Glassmorphism polish

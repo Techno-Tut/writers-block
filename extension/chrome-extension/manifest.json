@@ -1,25 +1,32 @@
 {
   "manifest_version": 3,
-  "name": "Writer Block",
+  "name": "Writers Block Assistant",
   "version": "1.0",
-  "description": "Break through writer's block with AI-powered writing assistance",
+  "description": "AI-powered writing assistant for Salesforce Quip",
   
   "permissions": [
     "activeTab",
     "storage"
   ],
   
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["content.js"],
-    "css": ["styles.css"]
-  }],
+  "host_permissions": [
+    "https://*.quip.com/*"
+  ],
+  
+  "content_scripts": [
+    {
+      "matches": ["https://*.quip.com/*"],
+      "js": ["dist/content.js"],
+      "run_at": "document_end"
+    }
+  ],
   
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "dist/background.js"
   },
   
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "Writers Block Assistant"
   }
 }
