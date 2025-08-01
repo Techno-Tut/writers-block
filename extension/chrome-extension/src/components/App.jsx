@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FloatingWindow from './FloatingWindow';
 import DebugPanel from './DebugPanel';
+import CustomStylesTester from './CustomStylesTester';
 import { useTextSelection, useFloatingWindow, useDebugPanel, useAPI } from '../hooks';
 import { replaceSelectedText, canReplaceText } from '../utils/textReplacement';
 import '../styles/app.css';
@@ -16,6 +17,9 @@ const App = () => {
   const [result, setResult] = useState(null);
   const [sessionId, setSessionId] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  
+  // Phase 1 testing state
+  const [showStylesTester, setShowStylesTester] = useState(false);
 
   const handleCloseFloatingWindow = () => {
     closeWindow();
@@ -100,6 +104,11 @@ const App = () => {
 
   return (
     <div className="writers-block-app">
+      {/* Phase 1 Testing Component */}
+      {showStylesTester && (
+        <CustomStylesTester />
+      )}
+      
       {/* Debug Panel - Toggle visibility */}
       {isDebugVisible && (
         <DebugPanel
@@ -124,6 +133,29 @@ const App = () => {
           title="Show Debug Panel"
         >
           🐛
+        </button>
+      )}
+      
+      {/* Phase 1 Testing Toggle */}
+      {!showStylesTester && (
+        <button 
+          className="debug-toggle"
+          onClick={() => setShowStylesTester(true)}
+          title="Show Custom Styles Tester (Phase 1)"
+          style={{ right: '60px' }}
+        >
+          🧪
+        </button>
+      )}
+      
+      {showStylesTester && (
+        <button 
+          className="debug-toggle"
+          onClick={() => setShowStylesTester(false)}
+          title="Hide Custom Styles Tester"
+          style={{ right: '60px' }}
+        >
+          ❌
         </button>
       )}
       

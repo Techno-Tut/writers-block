@@ -1,0 +1,2 @@
+let's work on feature 4 from prodct_spec.readme.md Let's work on it iteratively in phases. create a checkpoint file in docs/checpoints/feature4.readme.mddocument the phases and after each iteration update the readme file to include the current state of the code. In case i restart Q cli or loose context I will reuse this file to start again. Ensure it has deatils in a way where it is easier for other instance of agent to pick up by just reading the file.
+Plan the iterations first before implementaion we will implement thingsx

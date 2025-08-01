@@ -2,6 +2,7 @@
 
 .writers-block-app {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #2d3748; /* Ensure dark text by default */
 }
 
 /* Debug Panel Styles */
@@ -14,6 +15,7 @@
   max-width: 300px;
   font-size: 14px;
   line-height: 1.4;
+  color: #2d3748; /* Dark text */
 }
 
 .debug-header {
@@ -26,22 +28,17 @@
 .debug-info h3 {
   margin: 0;
   font-size: 16px;
-  color: #2d3748;
+  color: #2d3748; /* Dark text */
   font-weight: 600;
 }
 
 .debug-close {
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 16px;
   color: #718096;
   cursor: pointer;
-  padding: 0;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 4px;
   border-radius: 4px;
   transition: all 0.2s;
 }
@@ -53,11 +50,11 @@
 
 .debug-info p {
   margin: 8px 0;
-  color: #4a5568;
+  color: #4a5568; /* Dark text */
 }
 
 .debug-info strong {
-  color: #2d3748;
+  color: #2d3748; /* Dark text */
 }
 
 .selected-text {
@@ -68,7 +65,7 @@
   margin-top: 4px;
   font-family: 'Monaco', 'Menlo', monospace;
   font-size: 12px;
-  color: #2d3748;
+  color: #2d3748; /* Dark text */
   max-height: 100px;
   overflow-y: auto;
   word-break: break-word;
@@ -82,21 +79,74 @@
 
 /* Debug Toggle Button */
 .debug-toggle {
-  background: #4299e1;
-  border: none;
-  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
   width: 40px;
   height: 40px;
-  font-size: 18px;
+  border-radius: 50%;
+  border: none;
+  background: #4299e1;
+  color: white;
+  font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10002;
   transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .debug-toggle:hover {
   background: #3182ce;
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom Styles Tester - Ensure all text is dark */
+.writers-block-app * {
+  color: #2d3748; /* Force dark text for all elements */
+}
+
+.writers-block-app h1,
+.writers-block-app h2,
+.writers-block-app h3,
+.writers-block-app h4,
+.writers-block-app h5,
+.writers-block-app h6 {
+  color: #1a202c; /* Darker text for headings */
+}
+
+.writers-block-app strong {
+  color: #1a202c; /* Darker text for bold elements */
+  font-weight: 600;
+}
+
+/* Specific styles for test results */
+.writers-block-app .test-result-success {
+  color: #22543d !important;
+}
+
+.writers-block-app .test-result-error {
+  color: #742a2a !important;
+}
+
+/* Button styles */
+.writers-block-app button {
+  color: #2d3748;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.writers-block-app button:hover:not(:disabled) {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+}
+
+.writers-block-app button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

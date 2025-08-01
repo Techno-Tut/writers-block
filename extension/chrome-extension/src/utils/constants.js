@@ -27,6 +27,16 @@ export const API = {
   TIMEOUT: 30000 // 30 seconds
 };
 
+// Custom Rewrite Styles
+export const CUSTOM_STYLES = {
+  STORAGE_KEY: 'custom_rewrite_styles',
+  MAX_NAME_LENGTH: 50,
+  MAX_DESCRIPTION_LENGTH: 200,
+  MAX_PROMPT_LENGTH: 2000,
+  REQUIRED_PLACEHOLDER: '{selected_text}',
+  DEFAULT_STYLES: [] // No default custom styles
+};
+
 // Extension Info
 export const EXTENSION = {
   NAME: 'Writers Block Assistant',
