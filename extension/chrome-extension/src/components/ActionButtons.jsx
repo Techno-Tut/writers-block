@@ -8,6 +8,13 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
   
   // Load custom styles
   const { styles: customStyles, loading: stylesLoading, error: stylesError } = useCustomRewriteStyles();
+  
+  // Debug logging
+  console.log('ActionButtons - Custom styles state:', {
+    customStyles,
+    stylesLoading,
+    stylesError
+  });
 
   const builtInToneOptions = [
     { value: 'professional', label: 'Professional', type: 'builtin' },
@@ -17,11 +24,11 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
     { value: 'technical', label: 'Technical', type: 'builtin' }
   ];
 
-  // Combine built-in and custom styles
+  // Combine built-in and custom styles with error handling
   const allToneOptions = [
     ...builtInToneOptions,
-    ...(customStyles.length > 0 ? [{ type: 'separator' }] : []),
-    ...customStyles.map(style => ({
+    ...((customStyles && customStyles.length > 0) ? [{ type: 'separator' }] : []),
+    ...(customStyles || []).map(style => ({
       value: style.id,
       label: style.name,
       type: 'custom',
@@ -100,36 +107,61 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
       <div className="action-buttons" onClick={(e) => e.stopPropagation()}>
         <div className="tone-selector">
           <h4>Select style for rephrasing:</h4>
-          <select 
-            value={selectedTone} 
-            onChange={(e) => setSelectedTone(e.target.value)}
-            className="tone-dropdown"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {allToneOptions.map((option, index) => {
-              if (option.type === 'separator') {
-                return (
-                  <option key={`separator-${index}`} disabled className="dropdown-separator">
-                    ──────────────
-                  </option>
-                );
-              }
-              
-              return (
-                <option key={option.value} value={option.value}>
-                  {option.icon ? `${option.icon} ${option.label}` : option.label}
-                </option>
-              );
-            })}
-          </select>
           
           {stylesLoading && (
-            <div className="styles-loading">Loading custom styles...</div>
+            <div className="styles-loading">
+              <span className="loading-spinner"></span>
+              Loading custom styles...
+            </div>
           )}
           
           {stylesError && (
-            <div className="styles-error">Error loading custom styles</div>
+            <div className="styles-error">
+              ⚠️ Error loading custom styles
+            </div>
           )}
+          
+          <div className="tone-dropdown-container">
+            <select 
+              value={selectedTone} 
+              onChange={(e) => setSelectedTone(e.target.value)}
+              className="tone-dropdown"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {allToneOptions.map((option, index) => {
+                if (option.type === 'separator') {
+                  return (
+                    <option key={`separator-${index}`} disabled className="dropdown-separator">
+                      ──────────────
+                    </option>
+                  );
+                }
+                
+                return (
+                  <option key={option.value} value={option.value}>
+                    {option.icon ? `${option.icon} ${option.label}` : option.label}
+                  </option>
+                );
+              })}
+            </select>
+            
+            {/* Show description for selected custom style */}
+            {(() => {
+              const selectedOption = allToneOptions.find(opt => opt.value === selectedTone);
+              if (selectedOption && selectedOption.type === 'custom' && customStyles) {
+                const customStyle = customStyles.find(s => s.id === selectedTone);
+                if (customStyle) {
+                  return (
+                    <div className="style-preview">
+                      <small>📝 Custom Style</small>
+                      <p>{customStyle.description}</p>
+                    </div>
+                  );
+                }
+              }
+              return null;
+            })()}
+          </div>
           
           <div className="tone-actions">
             <button 
@@ -143,7 +175,7 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
                   Processing...
                 </>
               ) : (
-                'Rephrase'
+                'Apply Style'
               )}
             </button>
             <button 

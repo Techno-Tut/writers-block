@@ -76,6 +76,18 @@
 /* Tone Selector */
 .tone-selector {
   text-align: center;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .tone-selector h4 {
@@ -85,6 +97,11 @@
   font-weight: 600;
 }
 
+.tone-dropdown-container {
+  position: relative;
+  margin-bottom: 12px;
+}
+
 .tone-dropdown {
   width: 100%;
   padding: 8px 12px;
@@ -92,14 +109,47 @@
   border-radius: 6px;
   font-size: 13px;
   background: white;
-  margin-bottom: 12px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .tone-dropdown:focus {
   outline: none;
   border-color: #4299e1;
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.tone-dropdown:hover {
+  border-color: #cbd5e0;
+}
+
+.style-preview {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  text-align: left;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.style-preview small {
+  color: #4a5568;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.style-preview p {
+  margin: 0;
+  color: #2d3748;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .tone-actions {
@@ -112,6 +162,12 @@
   margin: 0;
   flex: 1;
   max-width: 100px;
+  transition: all 0.2s ease;
+}
+
+.tone-actions .btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Custom Styles Support */
@@ -127,14 +183,28 @@
   font-size: 12px;
   text-align: center;
   margin: 4px 0 8px 0;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .styles-loading {
   color: #4a5568;
   background: #f7fafc;
   border: 1px solid #e2e8f0;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #e2e8f0;
+  border-top: 2px solid #4a5568;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 .styles-error {

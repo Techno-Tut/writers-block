@@ -57,14 +57,14 @@ const FloatingWindow = ({
               e.stopPropagation();
               onOpenSettings();
             }}
-            title="Settings"
+            title="Settings - Manage custom rewrite styles"
           >
             ⚙️
           </button>
           <button 
             className="floating-window-close"
             onClick={onClose}
-            title="Close"
+            title="Close window"
           >
             ×
           </button>

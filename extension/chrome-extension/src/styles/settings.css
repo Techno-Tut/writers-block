@@ -301,8 +301,72 @@
   color: #6b7280;
 }
 
-.empty-state p {
-  margin: 0.5rem 0;
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  margin: 0 0 0.5rem 0;
+  color: #1a1a1a;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.empty-state > p {
+  margin: 0 0 2rem 0;
+  color: #6b7280;
+}
+
+.example-styles {
+  margin: 2rem 0;
+  text-align: left;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.example-styles h4 {
+  text-align: center;
+  margin: 0 0 1rem 0;
+  color: #4a5568;
+  font-size: 1rem;
+}
+
+.example-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.example-card {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: left;
+}
+
+.example-card strong {
+  display: block;
+  color: #2d3748;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.example-card p {
+  margin: 0;
+  color: #4a5568;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.btn-large {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  min-width: auto;
 }
 
 /* Loading and Error States */
@@ -313,9 +377,34 @@
   color: #6b7280;
 }
 
-.error {
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
   color: #e53e3e;
-  background-color: #fed7d7;
-  border: 1px solid #feb2b2;
-  border-radius: 0.375rem;
+  font-weight: 500;
+}
+
+.form-group input:focus.error,
+.form-group textarea:focus.error {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+/* Success states */
+.form-group input:valid:not(:placeholder-shown),
+.form-group textarea:valid:not(:placeholder-shown) {
+  border-color: #38a169;
+}
+
+.form-group input:valid:not(:placeholder-shown):focus,
+.form-group textarea:valid:not(:placeholder-shown):focus {
+  border-color: #38a169;
+  box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1);
 }
