@@ -1,8 +1,10 @@
 /* Action Buttons Styles */
 
 .action-buttons {
-  padding: 12px 0;
+  padding: 12px;
   border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 8px;
 }
 
 .btn {
@@ -10,19 +12,14 @@
   align-items: center;
   justify-content: center;
   padding: 8px 16px;
-  margin: 0 6px 8px 0;
   border: none;
   border-radius: 6px;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  min-width: 100px;
   height: 36px;
-}
-
-.btn:last-child {
-  margin-right: 0;
+  flex: 1; /* This makes buttons take equal space */
 }
 
 .btn-primary {
@@ -77,6 +74,8 @@
 .tone-selector {
   text-align: center;
   animation: slideIn 0.2s ease-out;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @keyframes slideIn {
@@ -100,6 +99,8 @@
 .tone-dropdown-container {
   position: relative;
   margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .tone-dropdown {
@@ -161,7 +162,6 @@
 .tone-actions .btn {
   margin: 0;
   flex: 1;
-  max-width: 100px;
   transition: all 0.2s ease;
 }
 

@@ -21,17 +21,21 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
 
   return (
     <aside className="settings-sidebar">
-      <nav className="sidebar-nav">
-        <ul className="nav-list">
+      <nav>
+        <ul className="settings-nav">
           {menuItems.map((item) => (
-            <li key={item.id} className="nav-item">
-              <button
-                className={`nav-button ${activeSection === item.id ? 'active' : ''}`}
-                onClick={() => onSectionChange(item.id)}
+            <li key={item.id}>
+              <a
+                href="#"
+                className={activeSection === item.id ? 'active' : ''}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSectionChange(item.id);
+                }}
               >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label">{item.label}</span>
-              </button>
+                <span className="settings-nav-icon">{item.icon}</span>
+                {item.label}
+              </a>
             </li>
           ))}
         </ul>

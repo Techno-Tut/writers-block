@@ -1,130 +1,146 @@
-import React, { useState } from 'react';
-import { useCustomRewriteStyles } from '../hooks/useCustomRewriteStyles';
+/**
+ * Refactored ActionButtons Component
+ * Clean, maintainable version with separated concerns
+ */
+
+import React from 'react';
+import { useStyleSelection } from '../hooks/useStyleSelection';
+import { API_CONFIG, ERROR_MESSAGES } from '../config';
+import { logError, AppError, ERROR_TYPES } from '../utils/errorHandling';
+import LoadingSpinner from './common/LoadingSpinner';
+import StylePreview from './common/StylePreview';
 import '../styles/action-buttons.css';
 
 const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
-  const [showToneSelector, setShowToneSelector] = useState(false);
-  const [selectedTone, setSelectedTone] = useState('professional');
-  
-  // Load custom styles
-  const { styles: customStyles, loading: stylesLoading, error: stylesError } = useCustomRewriteStyles();
-  
-  // Debug logging
-  console.log('ActionButtons - Custom styles state:', {
-    customStyles,
+  const {
+    showToneSelector,
+    selectedTone,
+    selectedOption,
+    selectedCustomStyle,
+    allToneOptions,
     stylesLoading,
-    stylesError
-  });
+    stylesError,
+    showSelector,
+    hideSelector,
+    selectTone,
+    isCustomStyleSelected
+  } = useStyleSelection();
 
-  const builtInToneOptions = [
-    { value: 'professional', label: 'Professional', type: 'builtin' },
-    { value: 'casual', label: 'Casual', type: 'builtin' },
-    { value: 'academic', label: 'Academic', type: 'builtin' },
-    { value: 'creative', label: 'Creative', type: 'builtin' },
-    { value: 'technical', label: 'Technical', type: 'builtin' }
-  ];
-
-  // Combine built-in and custom styles with error handling
-  const allToneOptions = [
-    ...builtInToneOptions,
-    ...((customStyles && customStyles.length > 0) ? [{ type: 'separator' }] : []),
-    ...(customStyles || []).map(style => ({
-      value: style.id,
-      label: style.name,
-      type: 'custom',
-      prompt: style.prompt,
-      icon: '📝'
-    }))
-  ];
-
+  /**
+   * Handle grammar fix action
+   */
   const handleGrammarFix = async (event) => {
-    console.log('Grammar Fix button clicked!');
     event.preventDefault();
     event.stopPropagation();
-    
-    // Prevent the button click from clearing text selection
     event.target.blur();
     
     try {
-      console.log('Calling onResult...');
-      await onResult(selectedText, 'grammar_fix', {});
-      console.log('onResult completed');
+      await onResult(selectedText, API_CONFIG.ENDPOINTS.GRAMMAR_FIX, {});
     } catch (error) {
-      console.error('Grammar fix error:', error);
-      onError?.(error.message);
+      const appError = new AppError(
+        'Grammar fix failed',
+        ERROR_TYPES.API,
+        error
+      );
+      logError(appError, { selectedText: selectedText.substring(0, 50) });
+      onError?.(appError.message);
     }
   };
 
+  /**
+   * Handle rephrase button click
+   */
   const handleRephraseClick = (event) => {
-    console.log('Rephrase button clicked!');
     event.preventDefault();
     event.stopPropagation();
     event.target.blur();
-    setShowToneSelector(true);
+    showSelector();
   };
 
+  /**
+   * Handle rephrase confirmation
+   */
   const handleRephraseConfirm = async (event) => {
-    console.log('Rephrase confirm clicked!');
     event.preventDefault();
     event.stopPropagation();
     event.target.blur();
     
     try {
-      // Find the selected option to determine if it's custom or built-in
-      const selectedOption = allToneOptions.find(option => option.value === selectedTone);
-      
-      if (selectedOption && selectedOption.type === 'custom') {
+      if (isCustomStyleSelected) {
         // Handle custom style
-        console.log('Using custom style:', selectedOption);
-        await onResult(selectedText, 'custom_prompt', { 
+        await onResult(selectedText, API_CONFIG.ENDPOINTS.CUSTOM_PROMPT, { 
           prompt: selectedOption.prompt,
           style_name: selectedOption.label 
         });
       } else {
         // Handle built-in style
-        console.log('Using built-in style:', selectedTone);
-        await onResult(selectedText, 'rephrase', { tone: selectedTone });
+        await onResult(selectedText, API_CONFIG.ENDPOINTS.REPHRASE, { 
+          tone: selectedTone 
+        });
       }
       
-      setShowToneSelector(false);
+      hideSelector();
     } catch (error) {
-      console.error('Rephrase error:', error);
-      onError?.(error.message);
-      setShowToneSelector(false);
+      const appError = new AppError(
+        'Rephrase failed',
+        ERROR_TYPES.API,
+        error
+      );
+      logError(appError, { 
+        selectedText: selectedText.substring(0, 50),
+        selectedTone,
+        isCustomStyle: isCustomStyleSelected
+      });
+      onError?.(appError.message);
+      hideSelector();
     }
   };
 
+  /**
+   * Handle rephrase cancellation
+   */
   const handleRephraseCancel = (event) => {
-    console.log('Rephrase cancel clicked!');
     event.preventDefault();
     event.stopPropagation();
     event.target.blur();
-    setShowToneSelector(false);
+    hideSelector();
   };
 
+  /**
+   * Handle tone selection change
+   */
+  const handleToneChange = (event) => {
+    selectTone(event.target.value);
+  };
+
+  // Render tone selector
   if (showToneSelector) {
     return (
       <div className="action-buttons" onClick={(e) => e.stopPropagation()}>
         <div className="tone-selector">
           <h4>Select style for rephrasing:</h4>
           
+          {/* Loading state */}
           {stylesLoading && (
-            <div className="styles-loading">
-              <span className="loading-spinner"></span>
-              Loading custom styles...
-            </div>
+            <LoadingSpinner 
+              size="small" 
+              text="Loading custom styles..." 
+              inline 
+            />
           )}
           
+          {/* Error state */}
           {stylesError && (
             <div className="styles-error">
-              ⚠️ Error loading custom styles
+              ⚠️ {ERROR_MESSAGES.CUSTOM_STYLES_LOAD_ERROR}
             </div>
           )}
           
+          {/* Dropdown container */}
           <div className="tone-dropdown-container">
             <select 
               value={selectedTone} 
-              onChange={(e) => setSelectedTone(e.target.value)}
+              onChange={handleToneChange}
               className="tone-dropdown"
               onClick={(e) => e.stopPropagation()}
             >
@@ -145,24 +161,13 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
               })}
             </select>
             
-            {/* Show description for selected custom style */}
-            {(() => {
-              const selectedOption = allToneOptions.find(opt => opt.value === selectedTone);
-              if (selectedOption && selectedOption.type === 'custom' && customStyles) {
-                const customStyle = customStyles.find(s => s.id === selectedTone);
-                if (customStyle) {
-                  return (
-                    <div className="style-preview">
-                      <small>📝 Custom Style</small>
-                      <p>{customStyle.description}</p>
-                    </div>
-                  );
-                }
-              }
-              return null;
-            })()}
+            {/* Style preview for custom styles */}
+            {selectedCustomStyle && (
+              <StylePreview style={selectedCustomStyle} />
+            )}
           </div>
           
+          {/* Action buttons */}
           <div className="tone-actions">
             <button 
               onClick={handleRephraseConfirm}
@@ -191,12 +196,14 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
     );
   }
 
+  // Render main action buttons
   return (
     <div className="action-buttons" onClick={(e) => e.stopPropagation()}>
       <button 
         onClick={handleGrammarFix}
         disabled={loading}
         className="btn btn-primary"
+        aria-label="Fix grammar and spelling"
       >
         {loading ? (
           <>
@@ -214,6 +221,7 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
         onClick={handleRephraseClick}
         disabled={loading}
         className="btn btn-primary"
+        aria-label="Rephrase text with different styles"
       >
         {loading ? (
           <>
