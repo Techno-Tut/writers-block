@@ -3,11 +3,11 @@
 ## 🎯 Feature Overview
 Transform the extension from fixed-function tool into customizable AI writing platform where users create their own rewrite styles with custom prompts, enabling unlimited extensibility for power users.
 
-## Current Status: Phase 2 Part 1 Complete ✅
+## Current Status: Phase 2 Complete ✅
 
 **Last Updated**: August 4, 2025
-**Current Phase**: Phase 2 Part 1 - Settings Page Foundation (COMPLETE)
-**Next Phase**: Phase 2 Part 2 - Main UI Integration
+**Current Phase**: Phase 2 - UI Integration (COMPLETE)
+**Next Phase**: Phase 3 - Backend Integration
 
 ## 📋 Current Project State (Before Feature 4)
 
@@ -315,6 +315,44 @@ async def process_text(request: ProcessTextRequest):
 - ✅ `manifest.json` - Added web accessible resources for settings page
 
 **Status:** Settings page foundation complete - Ready for Phase 2 Part 2 (Main UI Integration)
+
+### **Phase 2 Part 2: Main UI Integration** - ✅ COMPLETE
+- [x] **Settings Button Integration**: Added ⚙️ settings button to floating window header
+- [x] **Message Passing System**: Implemented background script communication for settings page access
+- [x] **Enhanced Rephrase Dropdown**: Integrated custom styles with built-in tone options
+- [x] **Custom Style Processing**: Added custom_prompt action handling with error logging
+- [x] **Visual Distinction**: Custom styles display with 📝 icons and separator from built-in styles
+- [x] **Event Handling Fixes**: Resolved floating window closing issues on button clicks
+- [x] **UI Polish**: Professional styling for settings button and dropdown enhancements
+
+**✅ Phase 2 Part 2 Testing Results (Completed August 4, 2025):**
+- ✅ **Settings Button Access**: ⚙️ button opens settings page in new tab via background script
+- ✅ **Rephrase Dropdown**: Shows built-in styles + custom styles with proper separation
+- ✅ **Custom Style Selection**: Custom styles selectable with 📝 icon visual distinction
+- ✅ **Custom Prompt Processing**: Custom styles send custom_prompt action (backend integration pending)
+- ✅ **Built-in Style Preservation**: Existing Professional/Casual/etc. styles work unchanged
+- ✅ **Event Handling**: Floating window stays open when clicking buttons, closes on outside clicks
+- ✅ **Error Handling**: Console logging for failed custom style processing and settings access
+- ✅ **UI Integration**: Seamless integration between main UI and settings page
+
+**Files Created:**
+- ✅ No new files (enhanced existing components)
+
+**Files Modified:**
+- ✅ `src/components/App.jsx` - Added settings handler with message passing, removed debug button
+- ✅ `src/components/FloatingWindow.jsx` - Added settings button to header with controls layout
+- ✅ `src/components/ActionButtons.jsx` - Enhanced rephrase dropdown with custom styles integration
+- ✅ `src/hooks/useFloatingWindow.js` - Fixed click outside detection to prevent premature closing
+- ✅ `src/styles/floating-window.css` - Added settings button styling and controls layout
+- ✅ `src/styles/action-buttons.css` - Added custom styles dropdown styling and loading states
+- ✅ `background.js` - Added openSettings message handler for Chrome API access
+
+**Status:** Phase 2 Complete - Main UI fully integrated with custom styles functionality
+
+**🔄 NEXT: Phase 3 - Backend Integration**
+- Backend custom_prompt action implementation
+- Error handling and user feedback improvements
+- Performance optimization and testing
 
 ### **Phase 2: Settings UI** - ⏳ Not Started
 - [ ] **SettingsPage.jsx**: Main settings navigation component

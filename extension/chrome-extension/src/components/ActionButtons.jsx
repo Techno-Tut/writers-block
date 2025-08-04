@@ -1,16 +1,33 @@
 import React, { useState } from 'react';
+import { useCustomRewriteStyles } from '../hooks/useCustomRewriteStyles';
 import '../styles/action-buttons.css';
 
 const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
   const [showToneSelector, setShowToneSelector] = useState(false);
   const [selectedTone, setSelectedTone] = useState('professional');
+  
+  // Load custom styles
+  const { styles: customStyles, loading: stylesLoading, error: stylesError } = useCustomRewriteStyles();
 
-  const toneOptions = [
-    { value: 'professional', label: 'Professional' },
-    { value: 'casual', label: 'Casual' },
-    { value: 'academic', label: 'Academic' },
-    { value: 'creative', label: 'Creative' },
-    { value: 'technical', label: 'Technical' }
+  const builtInToneOptions = [
+    { value: 'professional', label: 'Professional', type: 'builtin' },
+    { value: 'casual', label: 'Casual', type: 'builtin' },
+    { value: 'academic', label: 'Academic', type: 'builtin' },
+    { value: 'creative', label: 'Creative', type: 'builtin' },
+    { value: 'technical', label: 'Technical', type: 'builtin' }
+  ];
+
+  // Combine built-in and custom styles
+  const allToneOptions = [
+    ...builtInToneOptions,
+    ...(customStyles.length > 0 ? [{ type: 'separator' }] : []),
+    ...customStyles.map(style => ({
+      value: style.id,
+      label: style.name,
+      type: 'custom',
+      prompt: style.prompt,
+      icon: '📝'
+    }))
   ];
 
   const handleGrammarFix = async (event) => {
@@ -46,9 +63,25 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
     event.target.blur();
     
     try {
-      await onResult(selectedText, 'rephrase', { tone: selectedTone });
+      // Find the selected option to determine if it's custom or built-in
+      const selectedOption = allToneOptions.find(option => option.value === selectedTone);
+      
+      if (selectedOption && selectedOption.type === 'custom') {
+        // Handle custom style
+        console.log('Using custom style:', selectedOption);
+        await onResult(selectedText, 'custom_prompt', { 
+          prompt: selectedOption.prompt,
+          style_name: selectedOption.label 
+        });
+      } else {
+        // Handle built-in style
+        console.log('Using built-in style:', selectedTone);
+        await onResult(selectedText, 'rephrase', { tone: selectedTone });
+      }
+      
       setShowToneSelector(false);
     } catch (error) {
+      console.error('Rephrase error:', error);
       onError?.(error.message);
       setShowToneSelector(false);
     }
@@ -66,19 +99,38 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
     return (
       <div className="action-buttons" onClick={(e) => e.stopPropagation()}>
         <div className="tone-selector">
-          <h4>Select tone for rephrasing:</h4>
+          <h4>Select style for rephrasing:</h4>
           <select 
             value={selectedTone} 
             onChange={(e) => setSelectedTone(e.target.value)}
             className="tone-dropdown"
             onClick={(e) => e.stopPropagation()}
           >
-            {toneOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
+            {allToneOptions.map((option, index) => {
+              if (option.type === 'separator') {
+                return (
+                  <option key={`separator-${index}`} disabled className="dropdown-separator">
+                    ──────────────
+                  </option>
+                );
+              }
+              
+              return (
+                <option key={option.value} value={option.value}>
+                  {option.icon ? `${option.icon} ${option.label}` : option.label}
+                </option>
+              );
+            })}
           </select>
+          
+          {stylesLoading && (
+            <div className="styles-loading">Loading custom styles...</div>
+          )}
+          
+          {stylesError && (
+            <div className="styles-error">Error loading custom styles</div>
+          )}
+          
           <div className="tone-actions">
             <button 
               onClick={handleRephraseConfirm}

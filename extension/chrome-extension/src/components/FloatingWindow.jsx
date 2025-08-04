@@ -18,7 +18,8 @@ const FloatingWindow = ({
   onClearResult,
   onApplyText,
   successMessage,
-  onClearSuccess
+  onClearSuccess,
+  onOpenSettings
 }) => {
   if (!isVisible || !selectedText) {
     return null;
@@ -47,13 +48,27 @@ const FloatingWindow = ({
     >
       <div className="floating-window-header">
         <span className="floating-window-title">✨ Writers Block</span>
-        <button 
-          className="floating-window-close"
-          onClick={onClose}
-          title="Close"
-        >
-          ×
-        </button>
+        <div className="floating-window-controls">
+          <button 
+            className="settings-button"
+            onClick={(e) => {
+              console.log('Settings button clicked!');
+              e.preventDefault();
+              e.stopPropagation();
+              onOpenSettings();
+            }}
+            title="Settings"
+          >
+            ⚙️
+          </button>
+          <button 
+            className="floating-window-close"
+            onClick={onClose}
+            title="Close"
+          >
+            ×
+          </button>
+        </div>
       </div>
       
       <div className="floating-window-content">

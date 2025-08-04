@@ -27,18 +27,21 @@ export const useFloatingWindow = (hasSelection) => {
     const handleDocumentClick = (event) => {
       console.log('Document click detected, target:', event.target);
       
-      // Use setTimeout to let button clicks complete first
-      setTimeout(() => {
-        if (isVisible && windowRef.current) {
-          const isOutside = isClickOutsideWindow(event, windowRef.current);
-          console.log('Click outside window?', isOutside);
-          
-          if (isOutside) {
+      // Check immediately if click is inside window
+      if (isVisible && windowRef.current) {
+        const isOutside = isClickOutsideWindow(event, windowRef.current);
+        console.log('Click outside window?', isOutside);
+        
+        if (isOutside) {
+          // Use setTimeout only for outside clicks to allow any ongoing operations to complete
+          setTimeout(() => {
             console.log('Closing window due to outside click');
             setIsVisible(false);
-          }
+          }, 100);
+        } else {
+          console.log('Click inside window, not closing');
         }
-      }, 0);
+      }
     };
 
     if (isVisible) {

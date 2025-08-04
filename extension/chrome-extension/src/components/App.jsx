@@ -102,6 +102,24 @@ const App = () => {
     setSuccessMessage('');
   };
 
+  const handleOpenSettings = () => {
+    try {
+      // Send message to background script to open settings page
+      chrome.runtime.sendMessage(
+        { action: 'openSettings' },
+        (response) => {
+          if (response && response.success) {
+            console.log('Settings page opened successfully');
+          } else {
+            console.error('Failed to open settings page:', response?.error || 'Unknown error');
+          }
+        }
+      );
+    } catch (error) {
+      console.error('Failed to send settings message:', error);
+    }
+  };
+
   return (
     <div className="writers-block-app">
       {/* Phase 1 Testing Component */}
@@ -123,17 +141,6 @@ const App = () => {
           successMessage={successMessage}
           onClose={hideDebug}
         />
-      )}
-      
-      {/* Debug Toggle Button */}
-      {!isDebugVisible && (
-        <button 
-          className="debug-toggle"
-          onClick={showDebug}
-          title="Show Debug Panel"
-        >
-          🐛
-        </button>
       )}
       
       {/* Phase 1 Testing Toggle */}
@@ -175,6 +182,7 @@ const App = () => {
           onApplyText={handleApplyText}
           successMessage={successMessage}
           onClearSuccess={handleClearSuccess}
+          onOpenSettings={handleOpenSettings}
         />
       </div>
     </div>

@@ -113,3 +113,32 @@
   flex: 1;
   max-width: 100px;
 }
+
+/* Custom Styles Support */
+.dropdown-separator {
+  color: #a0aec0 !important;
+  background: #f7fafc !important;
+  font-size: 11px !important;
+  text-align: center !important;
+}
+
+.styles-loading,
+.styles-error {
+  font-size: 12px;
+  text-align: center;
+  margin: 4px 0 8px 0;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.styles-loading {
+  color: #4a5568;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.styles-error {
+  color: #e53e3e;
+  background: #fed7d7;
+  border: 1px solid #feb2b2;
+}

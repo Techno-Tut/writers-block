@@ -39,6 +39,33 @@
   font-size: 14px;
 }
 
+.floating-window-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.settings-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #718096;
+  cursor: pointer;
+  padding: 2px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.settings-button:hover {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
 .floating-window-close {
   background: none;
   border: none;

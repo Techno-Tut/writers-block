@@ -13,5 +13,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
   
+  if (request.action === 'openSettings') {
+    // Open settings page in new tab
+    chrome.tabs.create({ 
+      url: chrome.runtime.getURL('settings.html') 
+    }).then(() => {
+      console.log('Settings page opened successfully');
+      sendResponse({ success: true });
+    }).catch((error) => {
+      console.error('Failed to open settings page:', error);
+      sendResponse({ success: false, error: error.message });
+    });
+  }
+  
   return true; // Keep message channel open for async response
 });
