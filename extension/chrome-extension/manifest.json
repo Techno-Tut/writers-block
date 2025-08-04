@@ -28,5 +28,12 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "Writers Block Assistant"
-  }
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["settings.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
