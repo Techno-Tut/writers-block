@@ -54,6 +54,16 @@ ENV/
 env.bak/
 venv.bak/
 
+# Environment files (ignore actual configs, keep templates)
+.env.local
+.env.*.local
+
+# Keep environment templates (these are safe to commit)
+!.env.example
+!.env.development
+!.env.staging
+!.env.production
+
 # IDEs
 .vscode/
 .idea/
@@ -71,8 +81,7 @@ ehthumbs.db
 Thumbs.db
 
 # FastAPI specific
-.env.local
-.env.production
+# (removed .env.production since we want to keep the template)
 
 # Logs
 *.log
