@@ -5,6 +5,7 @@ Consolidated models with enhanced validation
 
 from pydantic import BaseModel, validator
 from typing import Optional, Dict, Literal, Any
+import uuid
 
 
 class ProcessTextRequest(BaseModel):
@@ -76,3 +77,42 @@ class ErrorResponse(BaseModel):
     message: str
     details: Optional[Dict[str, Any]] = None
     session_id: Optional[str] = None
+
+
+class FeedbackRequest(BaseModel):
+    """Request model for user feedback submission"""
+    type: Literal["general", "bug", "feature", "improvement"]
+    rating: int
+    message: Optional[str] = None
+    email: Optional[str] = None
+    allow_contact: bool = False
+    extension_version: Optional[str] = None
+    user_agent: Optional[str] = None
+    session_id: Optional[str] = None
+
+    @validator('rating')
+    def validate_rating(cls, v):
+        if not 1 <= v <= 5:
+            raise ValueError('Rating must be between 1 and 5')
+        return v
+
+    @validator('message')
+    def validate_message(cls, v):
+        if v and len(v.strip()) > 2000:
+            raise ValueError('Feedback message too long (max 2000 characters)')
+        return v.strip() if v else None
+
+    @validator('email')
+    def validate_email(cls, v, values):
+        if values.get('allow_contact') and not v:
+            raise ValueError('Email is required when allowing contact')
+        if v and '@' not in v:
+            raise ValueError('Invalid email format')
+        return v
+
+
+class FeedbackResponse(BaseModel):
+    """Response model for feedback submission"""
+    success: bool
+    message: str
+    feedback_id: str

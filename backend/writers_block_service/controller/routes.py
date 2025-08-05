@@ -7,10 +7,11 @@ import time
 from fastapi import APIRouter, HTTPException
 from pydantic import ValidationError as PydanticValidationError
 
-from ..models.schemas import ProcessTextRequest, ProcessTextResponse, HealthResponse
+from ..models.schemas import ProcessTextRequest, ProcessTextResponse, HealthResponse, FeedbackRequest, FeedbackResponse
 from ..services.llm_service import LLMService
+from ..services.feedback_service import feedback_service
 from ..core.config import settings
-from ..core.logging import cloudwatch_logger
+from ..core.logging import cloudwatch_logger, get_logger
 from ..core.exceptions import (
     WritersBlockException, 
     ValidationError,
@@ -187,3 +188,32 @@ async def process_text(request: ProcessTextRequest):
             message="Unable to process text. Please try again.",
             session_id=session_id
         )
+
+
+@router.post("/api/v1/feedback", response_model=FeedbackResponse)
+async def submit_feedback(request: FeedbackRequest):
+    """
+    Submit user feedback with analytics logging
+    
+    Collects user feedback for product improvement while maintaining privacy.
+    Only logs aggregated analytics data, never personal content.
+    """
+    try:
+        # Use core logging system
+        logger = get_logger(__name__)
+        
+        logger.info(f"Feedback submission: type={request.type}, rating={request.rating}")
+        
+        # Process feedback through service
+        result = await feedback_service.process_feedback(request)
+        
+        logger.info(f"Feedback processed successfully: id={result.feedback_id}")
+        return result
+        
+    except PydanticValidationError as e:
+        logger.warning(f"Validation error in feedback submission: {str(e)}")
+        raise HTTPException(status_code=422, detail=str(e))
+        
+    except Exception as e:
+        logger.error(f"Unexpected error in feedback submission: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to submit feedback. Please try again.")

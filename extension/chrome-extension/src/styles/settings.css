@@ -137,6 +137,96 @@
   align-items: center;
 }
 
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.action-icons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.action-icon {
+  position: relative;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.action-icon:hover {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border-primary);
+  color: var(--color-text-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.action-icon:active {
+  transform: translateY(0);
+}
+
+.slack-icon:hover {
+  background: rgba(74, 21, 75, 0.1);
+  border-color: rgba(74, 21, 75, 0.3);
+  color: #4a154b;
+}
+
+.feedback-icon:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+}
+
+/* Reuse existing tooltip system */
+.action-icon::before {
+  content: attr(title);
+  position: absolute;
+  bottom: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2d3748;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: var(--z-index-floating-tooltip);
+}
+
+.action-icon::after {
+  content: '';
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-bottom-color: #2d3748;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: var(--z-index-floating-tooltip);
+}
+
+.action-icon:hover::before,
+.action-icon:hover::after {
+  opacity: 1;
+}
+
 .version-badge {
   background: var(--color-bg-tertiary);
   color: var(--color-text-secondary);
