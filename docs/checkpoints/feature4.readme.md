@@ -3,11 +3,11 @@
 ## 🎯 Feature Overview
 Transform the extension from fixed-function tool into customizable AI writing platform where users create their own rewrite styles with custom prompts, enabling unlimited extensibility for power users.
 
-## Current Status: Phase 2 Complete with Refactoring & Polish ✅
+## Current Status: Phase 3 Complete - Backend Integration Achieved ✅
 
 **Last Updated**: August 4, 2025
-**Current Phase**: Phase 2 - UI Integration with Refactoring & Polish (COMPLETE)
-**Next Phase**: Phase 3 - Backend Integration
+**Current Phase**: Phase 3 - Backend Integration (COMPLETE)
+**Next Phase**: Phase 4 - End-to-End Testing & Polish
 
 ## 📋 Current Project State (Before Feature 4)
 
@@ -402,24 +402,81 @@ async def process_text(request: ProcessTextRequest):
 - [ ] **StyleList.jsx**: Display and manage existing styles
 - [ ] **Settings CSS**: Styling for settings interface
 
-### **Phase 3: Dropdown Integration** - ⏳ Not Started
-- [ ] **ActionButtons.jsx enhancement**: Integrate custom styles in dropdown
-- [ ] **Custom style loading**: Load styles for dropdown display
-- [ ] **Visual distinction**: Clear marking of custom vs built-in styles
-- [ ] **Dropdown scalability**: Handle multiple custom styles gracefully
+### **Phase 3: Backend Integration** - ✅ COMPLETE
+- [x] **Backend API Enhancement**: Updated models, LLM client, and endpoints for custom prompt support
+- [x] **Frontend API Integration**: Updated ActionButtons to use new API structure with custom_prompt parameter
+- [x] **Enhanced Error Handling**: Added validation error handling for 422 status codes and user-friendly messages
+- [x] **API Configuration Updates**: Removed CUSTOM_PROMPT endpoint, unified everything under rephrase action
+- [x] **Template Processing**: Backend now handles {selected_text} placeholder replacement
+- [x] **Comprehensive Testing**: Verified API integration and error handling with test scripts
 
-### **Phase 4: API Integration** - ⏳ Not Started
-- [ ] **useAPI.js enhancement**: Handle custom prompt processing
-- [ ] **Backend API update**: Add custom_prompt action support
-- [ ] **Prompt processing**: Replace {selected_text} placeholder correctly
-- [ ] **Error handling**: Graceful handling of malformed prompts
+**✅ Phase 3 Integration Results (Completed August 4, 2025):**
+- ✅ **Unified API Design**: Single rephrase endpoint handles both built-in tones and custom prompts
+- ✅ **Template Resolution**: Backend replaces {selected_text} placeholder, frontend sends raw templates
+- ✅ **Enhanced Validation**: Comprehensive validation with user-friendly error messages
+- ✅ **Error Handling**: Proper handling of 422 validation errors with specific message mapping
+- ✅ **Backward Compatibility**: Built-in styles (professional, casual, etc.) work unchanged
+- ✅ **Security Benefits**: Separated user content from templates for future prompt injection detection
+- ✅ **Performance**: No text duplication in API payload, efficient template processing
 
-### **Phase 5: Testing & Polish** - ⏳ Not Started
-- [ ] **End-to-end testing**: Complete user flow validation
-- [ ] **Edge case handling**: Error scenarios and recovery
-- [ ] **UI polish**: Animations, transitions, and visual refinements
-- [ ] **Performance testing**: Ensure no impact on existing functionality
-- [ ] **Documentation**: Update all relevant documentation
+**API Integration Details:**
+- **Built-in Styles**: `{ "action": "rephrase", "parameters": { "tone": "professional" } }`
+- **Custom Styles**: `{ "action": "rephrase", "parameters": { "custom_prompt": "template with {selected_text}", "style_name": "Style Name" } }`
+- **Validation**: Backend validates exactly one of tone/custom_prompt, placeholder presence, length limits
+- **Error Mapping**: 422 validation errors mapped to user-friendly messages in frontend
+
+**Files Modified:**
+- ✅ `backend/writers_block_service/models.py` - Added validation for custom prompts
+- ✅ `backend/writers_block_service/llm_client.py` - Enhanced rephrase_text method for template processing
+- ✅ `backend/writers_block_service/api.py` - Updated endpoint to handle custom_prompt parameter
+- ✅ `src/config/index.js` - Removed CUSTOM_PROMPT endpoint, added validation error messages
+- ✅ `src/components/ActionButtons.jsx` - Updated to send custom_prompt parameter to rephrase endpoint
+- ✅ `src/utils/errorHandling.js` - Enhanced error handling for validation errors and HTTP status codes
+
+**Testing Completed:**
+- ✅ **Backend API Tests**: All endpoints working with custom prompt support
+- ✅ **Frontend Integration Tests**: API call structures verified for all scenarios
+- ✅ **Error Handling Tests**: Validation error mapping and user-friendly messages working
+- ✅ **Build Verification**: Extension builds successfully with all changes
+
+**Status:** Phase 3 Complete - Full Backend Integration Achieved - Ready for End-to-End Testing
+
+### **Phase 3.5: Backend Refactoring & Security** - ✅ COMPLETE
+- [x] **Clean Architecture**: Refactored backend with separated concerns (Controller → Service → LLM)
+- [x] **Secure CloudWatch Logging**: Custom logging that only logs prompts/metadata, never user content
+- [x] **Lambda Optimization**: Module-level Mangum handler for optimal serverless performance
+- [x] **Security Enhancements**: Input sanitization, log injection prevention, safe error messages
+- [x] **Project Organization**: Clean module structure with core, services, controller, models separation
+- [x] **Production Ready**: Environment-based configuration, comprehensive error handling
+
+**✅ Phase 3.5 Refactoring Results (Completed August 4, 2025):**
+- ✅ **Security-First Logging**: CloudWatch integration without user data exposure
+- ✅ **Clean Code Architecture**: Maintainable structure with single responsibility principle
+- ✅ **Lambda-Optimized**: Best practices for AWS serverless deployment
+- ✅ **Comprehensive Testing**: All API endpoints verified working after refactoring
+- ✅ **Zero Breaking Changes**: Full backward compatibility maintained
+- ✅ **Developer Experience**: Simple `uv run dev` command for local development
+
+**Refactoring Details:**
+- **Old Structure**: Mixed concerns in single files (api.py, llm_client.py, models.py)
+- **New Structure**: Clean separation (controller/routes.py, services/llm_service.py, models/schemas.py)
+- **Security**: Log injection prevention, prompt-only logging, sanitized inputs
+- **Performance**: Module-level Lambda handler, optimized imports, efficient error handling
+- [ ] **Extension Loading**: Load updated extension in Chrome and verify functionality
+- [ ] **Custom Style Creation**: Test creating custom styles through settings page
+- [ ] **Custom Style Usage**: Test using custom styles in main floating window
+- [ ] **Built-in Style Verification**: Ensure existing functionality unchanged
+- [ ] **Error Scenario Testing**: Test validation errors and user feedback
+- [ ] **Performance Testing**: Verify no impact on existing functionality
+- [ ] **UI Polish**: Final refinements and user experience improvements
+
+### **Phase 4: End-to-End Testing & Polish** - 🔄 READY FOR IMPLEMENTATION
+### **Phase 5: Documentation & Deployment** - ⏳ Planned
+- [ ] **User Documentation**: Update user guides and help documentation
+- [ ] **Developer Documentation**: Update technical documentation and API specs
+- [ ] **Performance Optimization**: Bundle size optimization and code splitting
+- [ ] **Final Testing**: Comprehensive testing across different websites and scenarios
+- [ ] **Release Preparation**: Version updates and release notes
 
 ## 🔧 Development Environment Setup
 

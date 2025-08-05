@@ -67,13 +67,13 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
     
     try {
       if (isCustomStyleSelected) {
-        // Handle custom style
-        await onResult(selectedText, API_CONFIG.ENDPOINTS.CUSTOM_PROMPT, { 
-          prompt: selectedOption.prompt,
+        // Send custom prompt to rephrase endpoint
+        await onResult(selectedText, API_CONFIG.ENDPOINTS.REPHRASE, { 
+          custom_prompt: selectedOption.prompt,  // Template with {selected_text} placeholder
           style_name: selectedOption.label 
         });
       } else {
-        // Handle built-in style
+        // Handle built-in style normally
         await onResult(selectedText, API_CONFIG.ENDPOINTS.REPHRASE, { 
           tone: selectedTone 
         });
@@ -89,7 +89,8 @@ const ActionButtons = ({ selectedText, onResult, loading, onError }) => {
       logError(appError, { 
         selectedText: selectedText.substring(0, 50),
         selectedTone,
-        isCustomStyle: isCustomStyleSelected
+        isCustomStyle: isCustomStyleSelected,
+        styleName: selectedOption?.label
       });
       onError?.(appError.message);
       hideSelector();

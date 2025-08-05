@@ -9,6 +9,7 @@ dependencies = [
     "fastapi>=0.116.1",
     "python-dotenv>=1.1.1",
     "uvicorn>=0.35.0",
+    "mangum>=0.17.0",
 ]
 
 [project.optional-dependencies]
@@ -21,8 +22,8 @@ dev = [
 ]
 
 [project.scripts]
-dev = "writers_block_service.cli:dev"
-start = "writers_block_service.cli:start"
+dev = "writers_block_service.utils.dev:dev"
+start = "writers_block_service.utils.dev:start"
 
 [build-system]
 requires = ["hatchling"]

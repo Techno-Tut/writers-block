@@ -47,7 +47,13 @@ export const ERROR_MESSAGES = {
   PROMPT_MISSING_PLACEHOLDER: `Prompt must contain ${VALIDATION_LIMITS.REQUIRED_PLACEHOLDER} placeholder`,
   PROMPT_TOO_LONG: `Prompt must be ${VALIDATION_LIMITS.STYLE_PROMPT_MAX_LENGTH} characters or less`,
   CUSTOM_STYLES_LOAD_ERROR: 'Error loading custom styles',
-  SETTINGS_OPEN_ERROR: 'Failed to open settings page'
+  SETTINGS_OPEN_ERROR: 'Failed to open settings page',
+  // New validation error messages
+  VALIDATION_ERROR: 'Invalid request parameters',
+  CUSTOM_PROMPT_INVALID: 'Custom prompt must contain {selected_text} placeholder',
+  CONFLICTING_PARAMETERS: 'Cannot specify both tone and custom prompt',
+  MISSING_PARAMETERS: 'Must specify either tone or custom prompt',
+  API_VALIDATION_ERROR: 'Request validation failed'
 };
 
 // Success Messages
@@ -62,8 +68,7 @@ export const SUCCESS_MESSAGES = {
 export const API_CONFIG = {
   ENDPOINTS: {
     GRAMMAR_FIX: 'grammar_fix',
-    REPHRASE: 'rephrase',
-    CUSTOM_PROMPT: 'custom_prompt'
+    REPHRASE: 'rephrase'  // Handles both built-in tones and custom prompts
   },
   TIMEOUT: 30000,
   RETRY_ATTEMPTS: 3

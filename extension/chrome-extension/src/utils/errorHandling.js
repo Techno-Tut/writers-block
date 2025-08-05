@@ -13,6 +13,7 @@ export const ERROR_TYPES = {
   API: 'api',
   STORAGE: 'storage',
   CHROME_API: 'chrome_api',
+  NETWORK: 'network',
   UNKNOWN: 'unknown'
 };
 
@@ -76,9 +77,58 @@ export const handleStorageError = (operation, error) => {
 };
 
 /**
- * Handle API errors
+ * Handle API errors with enhanced validation error support
  */
 export const handleAPIError = (endpoint, error) => {
+  // Handle Pydantic validation errors (422 status)
+  if (error?.response?.status === 422) {
+    const responseData = error.response.data;
+    const validationErrors = responseData?.detail || [];
+    
+    if (validationErrors.length > 0) {
+      const firstError = validationErrors[0];
+      const errorMessage = firstError.msg || ERROR_MESSAGES.API_VALIDATION_ERROR;
+      
+      // Map specific validation errors to user-friendly messages
+      if (errorMessage.includes('both \'tone\' and \'custom_prompt\'')) {
+        return new AppError(ERROR_MESSAGES.CONFLICTING_PARAMETERS, ERROR_TYPES.VALIDATION, error);
+      }
+      
+      if (errorMessage.includes('either \'tone\' or \'custom_prompt\'')) {
+        return new AppError(ERROR_MESSAGES.MISSING_PARAMETERS, ERROR_TYPES.VALIDATION, error);
+      }
+      
+      if (errorMessage.includes('{selected_text} placeholder')) {
+        return new AppError(ERROR_MESSAGES.CUSTOM_PROMPT_INVALID, ERROR_TYPES.VALIDATION, error);
+      }
+      
+      // Generic validation error
+      return new AppError(errorMessage, ERROR_TYPES.VALIDATION, error);
+    }
+  }
+  
+  // Handle other HTTP errors
+  if (error?.response?.status) {
+    const status = error.response.status;
+    const message = error.response.data?.message || `HTTP ${status} Error`;
+    
+    if (status >= 500) {
+      return new AppError('Server temporarily unavailable. Please try again.', ERROR_TYPES.API, error);
+    }
+    
+    if (status === 404) {
+      return new AppError('API endpoint not found', ERROR_TYPES.API, error);
+    }
+    
+    return new AppError(message, ERROR_TYPES.API, error);
+  }
+  
+  // Handle network errors
+  if (error?.code === 'NETWORK_ERROR' || error?.message?.includes('Network Error')) {
+    return new AppError('Unable to connect to server. Please check your connection.', ERROR_TYPES.NETWORK, error);
+  }
+  
+  // Generic API error fallback
   const apiError = new AppError(
     `API error for ${endpoint}: ${error.message}`,
     ERROR_TYPES.API,
@@ -99,6 +149,8 @@ export const getUserFriendlyMessage = (error) => {
         return 'There was a problem saving your data. Please try again.';
       case ERROR_TYPES.API:
         return 'Unable to process your request. Please check your connection and try again.';
+      case ERROR_TYPES.NETWORK:
+        return 'Unable to connect to server. Please check your connection and try again.';
       case ERROR_TYPES.CHROME_API:
         return 'Extension error occurred. Please reload the page and try again.';
       case ERROR_TYPES.VALIDATION:
